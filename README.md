@@ -175,15 +175,38 @@ Use o Git para rastrear alterações nos arquivos do projeto (por exemplo, temas
    ```
 
 5. **Configurar o Repositório no GitHub**:
-   - Crie um repositório no GitHub chamado `abpc-wordpress`.
-   - Copie a URL do repositório (ex.: `https://github.com/yourusername/abpc-wordpress.git`).
+   - Crie um novo repositório no GitHub chamado `abpc-wordpress`.
+   - Copie a URL do repositório (ex.: `https://github.com/AdmilsonGoncalves/abpc-wordpress.git`).
 
-6. **Vincular e Enviar para o GitHub**:
+6. **Configurar Autenticação no GitHub**:
+   - **Nota**: O GitHub não suporta autenticação por senha para operações Git. Use um **personal access token** (PAT) ou chave SSH.
+   - **Opção 1: Personal Access Token (HTTPS)**:
+     - No GitHub, vá para **Settings** > **Developer settings** > **Personal access tokens** > **Generate new token (classic)**.
+     - Selecione o escopo `repo` e gere o token. Copie-o (ex.: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
+     - Configure o Git para armazenar credenciais:
+       ```
+       git config --global credential.helper store
+       ```
+     - Ao executar o push, use seu nome de usuário (`AdmilsonGoncalves`) e o token como senha.
+   - **Opção 2: SSH**:
+     - Gere uma chave SSH:
+       ```
+       ssh-keygen -t ed25519 -C "seu_email@example.com"
+       ```
+     - Adicione a chave pública ao GitHub (**Settings** > **SSH and GPG keys**).
+     - Atualize o remote para SSH:
+       ```
+       git remote set-url origin git@github.com:AdmilsonGoncalves/abpc-wordpress.git
+       ```
+
+7. **Vincular e Enviar para o GitHub**:
    ```
-   git remote add origin https://github.com/yourusername/abpc-wordpress.git
+   git remote add origin https://github.com/AdmilsonGoncalves/abpc-wordpress.git
    git branch -M main
    git push -u origin main
    ```
+   Se usar HTTPS, insira seu nome de usuário e o token quando solicitado. Se usar SSH, o push será autenticado automaticamente.
+
 
 ## 3. ‘Backup’ e Restauração do Ambiente
 
