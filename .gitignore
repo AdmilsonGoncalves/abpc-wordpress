@@ -1,0 +1,11 @@
+# Ignorar dados dos volumes do Docker
+abpc_db_data/
+abpc_wordpress_data/
+
+# Ignorar arquivo de ambiente sensível
+.env
+
+# Ignorar arquivos centrais do WordPress (se montados localmente)
+wp-admin/
+wp-includes/
+wp-content/uploads/  # Rastrear temas/plugins personalizados, ex.: wp-content/themes/abpc-theme
