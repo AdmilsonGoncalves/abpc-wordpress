@@ -48,4 +48,6 @@ networks:
 
 volumes:
   abpc_db_data:
+    name: abpc_db_data
   abpc_wordpress_data:
+    name: abpc_wordpress_data

@@ -74,59 +74,52 @@ Este setup assume que você está usando Ubuntu 22.04 LTS ou posterior. Usaremos
 6. **Criar o Arquivo Docker Compose**:
    Crie um arquivo chamado `docker-compose.yml` com o seguinte conteúdo, usando uma rede interna segura e nomes de contêineres e volumes com a marca ABPC:
    ```yaml
-	services:
-	  db:
-	    image: mysql:8.0.39
-	    container_name: abpc_db
-	    volumes:
-	      - abpc_db_data:/var/lib/mysql
-	    restart: always
-	    env_file:
-	      - .env
-	    environment:
-	      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-	      MYSQL_DATABASE: ${MYSQL_DATABASE}
-	      MYSQL_USER: ${MYSQL_USER}
-	      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-	    networks:
-	      - wordpress_network
-	    healthcheck:
-	      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-	      interval: 10s
-	      timeout: 5s
-	      retries: 5
+   services:
+     db:
+       image: mysql:8.0
+       container_name: abpc_db
+       volumes:
+         - abpc_db_data:/var/lib/mysql
+       restart: always
+       env_file:
+         - .env
+       environment:
+         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+         MYSQL_DATABASE: ${MYSQL_DATABASE}
+         MYSQL_USER: ${MYSQL_USER}
+         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+       networks:
+         - wordpress_network
 
-	  wordpress:
-	    depends_on:
-	      db:
-	        condition: service_healthy
-	    image: wordpress:latest
-	    container_name: abpc_web
-	    volumes:
-	      - abpc_wordpress_data:/var/www/html
-	    ports:
-	      - "8000:80"
-	    restart: always
-	    env_file:
-	      - .env
-	    environment:
-	      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-	      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-	      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-	      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-	    networks:
-	      - wordpress_network
+     wordpress:
+       depends_on:
+         - db
+       image: wordpress:latest
+       container_name: abpc_web
+       volumes:
+         - abpc_wordpress_data:/var/www/html
+       ports:
+         - "8000:80"
+       restart: always
+       env_file:
+         - .env
+       environment:
+         WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+         WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+         WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+         WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+       networks:
+         - wordpress_network
 
-	networks:
-	  wordpress_network:
-	    driver: bridge
-	    name: abpc_network
+   networks:
+     wordpress_network:
+       driver: bridge
+       name: abpc_network
+       internal: true
 
-	volumes:
-	  abpc_db_data:
-	    name: abpc_db_data
-	  abpc_wordpress_data:
-	    name: abpc_wordpress_data
+   volumes:
+     abpc_db_data: {}
+     abpc_wordpress_data: {}
    ```
 
 7. **Iniciar os Contêineres**:
@@ -182,38 +175,15 @@ Use o Git para rastrear alterações nos arquivos do projeto (por exemplo, temas
    ```
 
 5. **Configurar o Repositório no GitHub**:
-   - Crie um novo repositório no GitHub chamado `abpc-wordpress`.
-   - Copie a URL do repositório (ex.: `https://github.com/AdmilsonGoncalves/abpc-wordpress.git`).
+   - Crie um repositório no GitHub chamado `abpc-wordpress`.
+   - Copie a URL do repositório (ex.: `https://github.com/yourusername/abpc-wordpress.git`).
 
-6. **Configurar Autenticação no GitHub**:
-   - **Nota**: O GitHub não suporta autenticação por senha para operações Git. Use um **personal access token** (PAT) ou chave SSH.
-   - **Opção 1: Personal Access Token (HTTPS)**:
-     - No GitHub, vá para **Settings** > **Developer settings** > **Personal access tokens** > **Generate new token (classic)**.
-     - Selecione o escopo `repo` e gere o token. Copie-o (ex.: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
-     - Configure o Git para armazenar credenciais:
-       ```
-       git config --global credential.helper store
-       ```
-     - Ao executar o push, use seu nome de usuário (`AdmilsonGoncalves`) e o token como senha.
-   - **Opção 2: SSH**:
-     - Gere uma chave SSH:
-       ```
-       ssh-keygen -t ed25519 -C "seu_email@example.com"
-       ```
-     - Adicione a chave pública ao GitHub (**Settings** > **SSH and GPG keys**).
-     - Atualize o remote para SSH:
-       ```
-       git remote set-url origin git@github.com:AdmilsonGoncalves/abpc-wordpress.git
-       ```
-
-7. **Vincular e Enviar para o GitHub**:
+6. **Vincular e Enviar para o GitHub**:
    ```
-   git remote add origin https://github.com/AdmilsonGoncalves/abpc-wordpress.git
+   git remote add origin https://github.com/yourusername/abpc-wordpress.git
    git branch -M main
    git push -u origin main
    ```
-   Se usar HTTPS, insira seu nome de usuário e o token quando solicitado. Se usar SSH, o push será autenticado automaticamente.
-
 
 ## 3. ‘Backup’ e Restauração do Ambiente
 
