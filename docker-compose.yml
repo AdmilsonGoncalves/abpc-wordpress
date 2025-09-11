@@ -1,6 +1,6 @@
 services:
   db:
-    image: mysql:8.0
+    image: mysql:8.0.39
     container_name: abpc_db
     volumes:
       - abpc_db_data:/var/lib/mysql
@@ -14,10 +14,16 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - wordpress_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   wordpress:
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     image: wordpress:latest
     container_name: abpc_web
     volumes:
@@ -39,8 +45,7 @@ networks:
   wordpress_network:
     driver: bridge
     name: abpc_network
-    internal: true
 
 volumes:
-  abpc_db_data: {}
-  abpc_wordpress_data: {}
+  abpc_db_data:
+  abpc_wordpress_data:
