@@ -317,3 +317,69 @@ Esta seção descreve como clonar o repositório do projeto `abpc-wordpress` do 
    - Atualize os permalinks para incluir `/abpc/` se desejar (ex.: `/abpc/%postname%/`).
    - Defina o título do site como "ABPC" ou "Associação Brasiliense de Peritos em Criminalística".
    - Teste o site, aponte o DNS do domínio para os nameservers do Hostinger e ative o AutoSSL.
+
+## 6. Limpando e Reaplicando o Ambiente Docker
+
+Caso sejam feitas alterações no arquivo `docker-compose.yml`, no arquivo `.env`, ou em outros componentes do ambiente (como imagens Docker ou configurações), pode ser necessário limpar o ambiente existente e recriá-lo para aplicar as modificações corretamente. Esta seção descreve como limpar o ambiente Docker do projeto ABPC WordPress e reiniciá-lo.
+
+### Pré-requisitos
+- Docker e Docker Compose instalados (veja Seção 1, passos 2 e 3).
+- O projeto já configurado no diretório `~/abpc-wordpress` (veja Seção 5).
+- **Aviso**: A limpeza removerá os contêineres, redes e volumes. Faça backup dos dados importantes antes de prosseguir (veja Seção 3).
+
+### Instruções Passo a Passo
+
+1. **Navegar até o Diretório do Projeto**:
+   Acesse o diretório do projeto:
+   ```
+   cd ~/abpc-wordpress
+   ```
+
+2. **Parar e Remover os Contêineres**:
+   Pare e remova os contêineres criados pelo `docker-compose.yml`:
+   ```
+   docker compose down
+   ```
+   Este comando para os contêineres `abpc_web` e `abpc_db` e remove a rede `abpc_network`.
+
+3. **Remover os Volumes (Opcional)**:
+   Se as alterações exigirem uma reinicialização completa (por exemplo, mudanças nas configurações do banco de dados ou arquivos do WordPress), remova os volumes associados:
+   ```
+   docker volume rm abpc_db_data abpc_wordpress_data
+   ```
+   **Nota**: Isso apagará o banco de dados e os arquivos do WordPress. Certifique-se de ter um backup (veja Seção 3) se precisar restaurar os dados posteriormente.
+
+4. **Remover Imagens Docker (Opcional)**:
+   Se você alterou a versão das imagens (ex.: `mysql:8.0.39` ou `wordpress:latest`) no `docker-compose.yml`, pode ser necessário remover as imagens antigas:
+   ```
+   docker image rm mysql:8.0.39 wordpress:latest
+   ```
+   Isso força o Docker a baixar as versões mais recentes das imagens ao reiniciar.
+
+5. **Aplicar as Alterações**:
+   Após realizar as alterações necessárias no `docker-compose.yml` ou `.env`, recrie e inicie o ambiente:
+   ```
+   docker compose up -d --build
+   ```
+   - A opção `--build` garante que quaisquer mudanças na configuração sejam aplicadas.
+   - O Docker baixará as imagens necessárias (se removidas) e recriará os contêineres, volumes e redes.
+
+6. **Verificar o Ambiente**:
+   Confirme que os contêineres estão funcionando:
+   ```
+   docker compose ps
+   ```
+   Acesse o WordPress em `http://localhost:8000`. Se os volumes foram removidos, complete o assistente de configuração do WordPress novamente, definindo o título como "ABPC" ou "Associação Brasiliense de Peritos em Criminalística".
+
+7. **Restaurar Dados (Se Necessário)**:
+   Se você fez backup anteriormente (Seção 3) e removeu os volumes, restaure os dados conforme descrito na Seção 3, passos de restauração.
+
+### Notas
+- **Cuidado com a remoção de volumes**: A remoção dos volumes `abpc_db_data` e `abpc_wordpress_data` é irreversível sem backup. Sempre execute a Seção 3 (Instruções de Backup) antes de limpar os volumes.
+- **Alterações leves**: Se as mudanças no `docker-compose.yml` forem pequenas (ex.: alteração de portas ou variáveis de ambiente), apenas o comando `docker compose down` seguido de `docker compose up -d` pode ser suficiente, sem remover volumes ou imagens.
+- **Manutenção regular**: Para evitar conflitos, limpe imagens e contêineres não utilizados periodicamente com:
+  ```
+  docker system prune -a
+  docker volume prune
+  ```
+  Use esses comandos com cuidado, pois eles afetam todos os projetos Docker na máquina.
