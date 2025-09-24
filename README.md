@@ -188,13 +188,23 @@ Use o Git para rastrear alterações nos arquivos do projeto (por exemplo, temas
 6. **Configurar Autenticação no GitHub**:
    - **Nota**: O GitHub não suporta autenticação por senha para operações Git. Use um **personal access token** (PAT) ou chave SSH.
    - **Opção 1: Personal Access Token (HTTPS)**:
-     - No GitHub, vá para **Settings** > **Developer settings** > **Personal access tokens** > **Generate new token (classic)**.
-     - Selecione o escopo `repo` e gere o token. Copie-o (ex.: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
-     - Configure o Git para armazenar credenciais:
+     - No GitHub, vá para **Settings** > **Developer settings** > **Personal access tokens** > **Tokens (classic)** > **Generate new token**.
+     - Selecione o escopo `repo` (e outros, se necessário, como `workflow` para GitHub Actions) e gere o token. Copie-o (ex.: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
+     - **Vincular o Token**:
+       - Configure o Git para armazenar credenciais localmente, permitindo que o token seja usado automaticamente em operações futuras:
+         ```
+         git config --global credential.helper store
+         ```
+       - **Acessar o Repositório com o Token**:
+         - Ao executar comandos como `git push`, `git pull` ou `git clone`, use a URL HTTPS do repositório (ex.: `https://github.com/AdmilsonGoncalves/abpc-wordpress.git`). Quando solicitado, insira seu nome de usuário (ex.: `AdmilsonGoncalves`) e o token como senha. Exemplo de comando para clonar:
+           ```
+           git clone https://github.com/AdmilsonGoncalves/abpc-wordpress.git
+           ```
+         - Após o primeiro uso, o token será armazenado (se `credential.helper store` estiver configurado) e não será necessário inseri-lo novamente.
+     - Alternativamente, para evitar prompts de autenticação, você pode incorporar o token diretamente na URL do repositório (não recomendado para scripts públicos, pois expõe o token):
        ```
-       git config --global credential.helper store
+       git clone https://AdmilsonGoncalves:ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@github.com/AdmilsonGoncalves/abpc-wordpress.git
        ```
-     - Ao executar o push, use seu nome de usuário (`AdmilsonGoncalves`) e o token como senha.
    - **Opção 2: SSH**:
      - Gere uma chave SSH:
        ```
