@@ -43,7 +43,7 @@ Este setup assume que você está usando Ubuntu 22.04 LTS ou posterior. Usaremos
    ```
    Verifique a instalação:
    ```
-   docker-compose --version
+   docker compose version
    ```
 
 4. **Criar um Diretório para o Projeto**:
@@ -55,7 +55,7 @@ Este setup assume que você está usando Ubuntu 22.04 LTS ou posterior. Usaremos
 5. **Criar o Arquivo .env**:
    Crie um arquivo `.env` para armazenar variáveis de ambiente sensíveis e o nome do projeto:
    ```
-   touch .env
+   nano .env
    ```
    Adicione o seguinte conteúdo (substitua as senhas por valores seguros):
    ```
