@@ -132,13 +132,13 @@ Este setup assume que você está usando Ubuntu 22.04 LTS ou posterior. Usaremos
 7. **Iniciar os Contêineres**:
    Execute:
    ```
-   docker-compose up -d
+   docker compose up -d
    ```
    Acesse o WordPress em `http://localhost:8000` e complete o assistente de configuração, definindo o título do site como "ABPC" ou "Associação Brasiliense de Peritos em Criminalística".
 
 8. **Parar os Contêineres** (Quando Necessário):
    ```
-   docker-compose down
+   docker compose down
    ```
 
 ## 2. Controle de Versão com Git e GitHub
@@ -223,7 +223,7 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
 
 1. **Parar os Contêineres** (Opcional, mas recomendado):
    ```
-   docker-compose down
+   docker compose down
    ```
 
 2. **Fazer Backup dos Arquivos do WordPress**:
@@ -235,7 +235,7 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
 3. **Fazer Backup do Banco de Dados**:
    Exporte o SQL:
    ```
-   docker-compose exec abpc_db mysqldump -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > abpc_db_backup.sql
+   docker compose exec abpc_db mysqldump -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > abpc_db_backup.sql
    ```
 
 4. **Arquivar Tudo**:
@@ -258,18 +258,18 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
 3. **Restaurar Arquivos do WordPress**:
    Inicie os contêineres e restaure:
    ```
-   docker-compose up -d
+   docker compose up -d
    docker run --rm --volumes-from abpc_web -v $(pwd):/backup ubuntu tar xvf /backup/abpc_wordpress_files.tar -C /
    ```
 
 4. **Restaurar o Banco de Dados**:
    ```
-   cat abpc_db_backup.sql | docker-compose exec -T abpc_db mysql -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE}
+   cat abpc_db_backup.sql | docker compose exec -T abpc_db mysql -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE}
    ```
 
 5. **Reiniciar os Contêineres**:
    ```
-   docker-compose restart
+   docker compose restart
    ```
    Acesse em `http://localhost:8000`.
 
