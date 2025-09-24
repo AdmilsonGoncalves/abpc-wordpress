@@ -273,7 +273,25 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
    ```
    Acesse em `http://localhost:8000`.
 
-## 4. Implantando o Site no Hostinger
+## 4. Conectando e Baixando o Repositório do GitHub
+
+Esta seção descreve como clonar o repositório do projeto `abpc-wordpress` do GitHub para sua máquina local e configurar o ambiente para desenvolvimento, garantindo que você possa trabalhar com os arquivos do projeto ABPC.
+
+### Pré-requisitos
+- Git instalado (veja Seção 2, passo 1).
+- Acesso ao repositório GitHub `abpc-wordpress` (ex.: `https://github.com/AdmilsonGoncalves/abpc-wordpress.git`).
+- Autenticação configurada (HTTPS com Personal Access Token ou SSH, conforme descrito na Seção 2, passo 6).
+
+### Instruções Passo a Passo
+
+1. **Clonar o Repositório**:
+   No terminal, navegue até o diretório onde deseja armazenar o projeto e clone o repositório:
+	```
+	cd ~
+	git clone https://github.com/AdmilsonGoncalves/abpc-wordpress.git
+	```
+
+## 5. Implantando o Site no Hostinger
 
 ### Instruções Passo a Passo
 
