@@ -233,7 +233,7 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
 
 1. **Parar os Contêineres** (Opcional, mas recomendado):
    ```
-   docker compose down
+   docker compose stop
    ```
 
 2. **Fazer Backup dos Arquivos do WordPress**:
@@ -254,6 +254,12 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
    tar -czvf abpc_full_backup.tar.gz docker-compose.yml .gitignore .env abpc_db_backup.sql abpc_wordpress_files.tar
    ```
    Transfira `abpc_full_backup.tar.gz` para outro computador.
+
+5. **Reiniciar os Contêineres** (caso os tenha parado):
+   ```
+   docker compose start
+   ```
+
 
 ### Instruções de Restauração em Outro Computador
 
