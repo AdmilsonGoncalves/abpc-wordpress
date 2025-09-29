@@ -245,7 +245,7 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
 3. **Fazer Backup do Banco de Dados**:
    Exporte o SQL:
    ```
-   docker compose exec abpc_db mysqldump -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > abpc_db_backup.sql
+   docker compose exec db mysqldump -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > abpc_db_backup.sql
    ```
 
 4. **Arquivar Tudo**:
