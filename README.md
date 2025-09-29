@@ -225,7 +225,42 @@ Use o Git para rastrear alterações nos arquivos do projeto (por exemplo, temas
    Se usar HTTPS, insira seu nome de usuário e o token quando solicitado. Se usar SSH, o push será autenticado automaticamente.
 
 
-## 3. ‘Backup’ e Restauração do Ambiente
+## 3. Conectando e Baixando o Repositório do GitHub
+
+Esta seção descreve como clonar o repositório do projeto `abpc-wordpress` do GitHub para sua máquina local e configurar o ambiente para desenvolvimento, garantindo que você possa trabalhar com os arquivos do projeto ABPC.
+
+### Pré-requisitos
+- Git instalado (veja Seção 2, passo 1).
+- Acesso ao repositório GitHub `abpc-wordpress` (ex.: `https://github.com/AdmilsonGoncalves/abpc-wordpress.git`).
+- Autenticação configurada (HTTPS com Personal Access Token ou SSH, conforme descrito na Seção 2, passo 6).
+
+### Instruções Passo a Passo
+
+1. **Clonar o Repositório**:
+   No terminal, navegue até o diretório onde deseja armazenar o projeto e clone o repositório:
+	```
+	cd ~
+	git clone https://github.com/SuaContaGitHub/abpc-wordpress.git
+	```
+## 4. Backup e Migração para Produção (RECOMENDADO)
+
+### Instruções Passo a Passo
+
+1. **Preparar o Site Local para Exportação**:
+   - Instale o plugin "All-in-One WP Migration" via painel do WordPress (`http://localhost:8000/wp-admin`).
+   - Exporte para um arquivo `.wpress` (inclui arquivos e banco de dados).
+
+2. **Configurar o WordPress no servidor de produção**:
+   - Instale o "All-in-One WP Migration" no site WordPress.
+   - Importe o arquivo `.wpress`.
+   
+3. **Passos Pós-Implantação** (se necessário):
+   - Atualize os permalinks para incluir `/abpc/` se desejar (ex.: `/abpc/%postname%/`).
+   - Defina o título do site como "ABPC" ou "Associação Brasiliense de Peritos em Criminalística".
+   - Teste o site, aponte o DNS do domínio para os nameservers e ative o AutoSSL.'
+  
+
+## 5. ‘Backup’ e Restauração do Ambiente via Docker (alternativo à Seção 4)
 
 Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arquivo `.env`.
 
@@ -246,6 +281,11 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
    Exporte o SQL:
    ```
    docker compose exec db mysqldump -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > abpc_db_backup.sql
+   ```
+   Obs: necessário copiar as variáveis de ambiente acima para o arquivo de configuração do bash para que seja reconhecido pelo comando acima:
+   ```
+   nano ~/.zshrc
+   source ~/.zshrc
    ```
 
 4. **Arquivar Tudo**:
@@ -289,53 +329,8 @@ Os ‘backups’ incluem arquivos do WordPress, o banco de dados MySQL e o arqui
    ```
    Acesse em `http://localhost:8000`.
 
-## 4. Conectando e Baixando o Repositório do GitHub
-
-Esta seção descreve como clonar o repositório do projeto `abpc-wordpress` do GitHub para sua máquina local e configurar o ambiente para desenvolvimento, garantindo que você possa trabalhar com os arquivos do projeto ABPC.
-
-### Pré-requisitos
-- Git instalado (veja Seção 2, passo 1).
-- Acesso ao repositório GitHub `abpc-wordpress` (ex.: `https://github.com/AdmilsonGoncalves/abpc-wordpress.git`).
-- Autenticação configurada (HTTPS com Personal Access Token ou SSH, conforme descrito na Seção 2, passo 6).
-
-### Instruções Passo a Passo
-
-1. **Clonar o Repositório**:
-   No terminal, navegue até o diretório onde deseja armazenar o projeto e clone o repositório:
-	```
-	cd ~
-	git clone https://github.com/AdmilsonGoncalves/abpc-wordpress.git
-	```
-
-## 5. Implantando o Site no Hostinger
-
-### Instruções Passo a Passo
-
-1. **Preparar o Site Local para Exportação**:
-   - Instale o plugin "All-in-One WP Migration" via painel do WordPress (`http://localhost:8000/wp-admin`).
-   - Exporte para um arquivo `.wpress` (inclui arquivos e banco de dados).
-
-   Alternativamente, exportação manual:
-   - Exporte o banco: Use `abpc_db_backup.sql` da Seção 3.
-   - Compacte os arquivos do WordPress de `/var/www/html`.
-
-2. **Configurar o WordPress no Hostinger**:
-   - Faça login no painel do Hostinger.
-   - Vá para Websites > Adicionar Website > Selecionar WordPress.
-   - Conclua a configuração com um site temporário.
-
-3. **Importar para o Hostinger**:
-   - Instale o "All-in-One WP Migration" no site WordPress do Hostinger.
-   - Importe o arquivo `.wpress`.
-   - Alternativamente, faça upload dos arquivos compactados para `/public_html` via Gerenciador de Arquivos ou FTP, crie um banco MySQL, importe `abpc_db_backup.sql` via phpMyAdmin, atualize `wp-config.php` com as credenciais do Hostinger e substitua `localhost:8000` pelo domínio usando um plugin como Better Search Replace.
-
-4. **Passos Pós-Implantação**:
-   - Atualize os permalinks para incluir `/abpc/` se desejar (ex.: `/abpc/%postname%/`).
-   - Defina o título do site como "ABPC" ou "Associação Brasiliense de Peritos em Criminalística".
-   - Teste o site, aponte o DNS do domínio para os nameservers do Hostinger e ative o AutoSSL.
 
 ## 6. Limpando e Reaplicando o Ambiente Docker
-
 Caso sejam feitas alterações no arquivo `docker-compose.yml`, no arquivo `.env`, ou em outros componentes do ambiente (como imagens Docker ou configurações), pode ser necessário limpar o ambiente existente e recriá-lo para aplicar as modificações corretamente. Esta seção descreve como limpar o ambiente Docker do projeto ABPC WordPress e reiniciá-lo.
 
 ### Pré-requisitos
