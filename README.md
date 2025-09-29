@@ -1,6 +1,6 @@
 # Ambiente de Desenvolvimento WordPress para ABPC
 
-Este README fornece instruções para configurar um ambiente de desenvolvimento local para um site WordPress da **Associação Brasiliense de Peritos em Criminalística (ABPC)** usando Docker e Docker Compose no Ubuntu, com credenciais armazenadas de forma segura em um arquivo `.env`. Inclui controle de versão com Git e GitHub, backup e restauração do ambiente, e implantação do site final no Hostinger.
+Este README fornece instruções para configurar um ambiente de desenvolvimento local para um site WordPress da **Associação Brasiliense de Peritos em Criminalística (ABPC)** usando Docker e Docker Compose no Ubuntu, com credenciais armazenadas de forma segura em um arquivo `.env`. Inclui controle de versão com Git e GitHub, backup e restauração do ambiente, e implantação do site final no serviço de hospedagem.
 
 ## 1. Configurando o Ambiente de Desenvolvimento Local
 
